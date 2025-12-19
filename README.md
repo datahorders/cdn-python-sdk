@@ -477,6 +477,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- Documentation: https://wiki.datahorders.org/api
-- Issues: https://gitlab.com/datahorders/cdn-python-sdk/-/issues
-- Email: support@datahorders.org
+- [Documentation](https://wiki.datahorders.org/api)
+- [Issues](https://github.com/datahorders/cdn-python-sdk/issues)
