@@ -20,7 +20,7 @@ pip install datahorders-cdn
 Or install from source:
 
 ```bash
-pip install git+https://gitlab.com/datahorders/cdn-python-sdk.git
+pip install git+https://github.com/datahorders/cdn-python-sdk.git
 ```
 
 ## Quick Start
@@ -445,7 +445,7 @@ while True:
 
 ```bash
 # Clone the repository
-git clone https://gitlab.com/datahorders/cdn-python-sdk.git
+git clone https://github.com/datahorders/cdn-python-sdk.git
 cd cdn-python-sdk
 
 # Install development dependencies

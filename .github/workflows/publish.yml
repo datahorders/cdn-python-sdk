@@ -1,0 +1,146 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Run tests
+        run: pytest
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Run ruff linting
+        run: ruff check .
+
+      - name: Run mypy
+        run: mypy datahorders_cdn
+
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build dependencies
+        run: python -m pip install --upgrade pip build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Store distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    environment:
+      name: pypi
+      url: https://pypi.org/p/datahorders-cdn
+    permissions:
+      id-token: write  # Required for trusted publishing (OIDC)
+    steps:
+      - name: Download distribution packages
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No token needed - uses OIDC trusted publishing
+        # Configure at: https://pypi.org/manage/project/datahorders-cdn/settings/publishing/
+
+  publish-testpypi:
+    name: Publish to TestPyPI
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    # Only publish to TestPyPI on pre-release tags (e.g., v1.0.0-rc1, v1.0.0-beta1)
+    if: contains(github.ref, '-')
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/datahorders-cdn
+    permissions:
+      id-token: write  # Required for trusted publishing (OIDC)
+    steps:
+      - name: Download distribution packages
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+        # No token needed - uses OIDC trusted publishing
+        # Configure at: https://test.pypi.org/manage/project/datahorders-cdn/settings/publishing/
