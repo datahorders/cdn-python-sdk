@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from datahorders_cdn.models import (
     CdnNode,
@@ -352,7 +352,7 @@ class HealthChecksResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/healthcheck-profiles/{profile_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_profile_async(self, profile_id: str) -> bool:
         """Delete a health check profile asynchronously.
@@ -364,7 +364,7 @@ class HealthChecksResource(BaseResource):
             True if successful.
         """
         response = await self._delete_async(f"/healthcheck-profiles/{profile_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     def toggle_server_health_check(
         self,

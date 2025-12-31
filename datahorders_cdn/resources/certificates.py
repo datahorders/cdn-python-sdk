@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, List
 
 from datahorders_cdn.models import (
     AcmeCertificateStatus,
@@ -50,7 +50,7 @@ class CertificatesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         status: str | None = None,
-    ) -> tuple[list[Certificate], PaginationMeta]:
+    ) -> tuple[List[Certificate], PaginationMeta]:
         """List all certificates asynchronously.
 
         Args:
@@ -117,7 +117,7 @@ class CertificatesResource(BaseResource):
         name: str,
         cert_content: str,
         key_content: str,
-        domains: list[str] | None = None,
+        domains: List[str] | None = None,
         auto_renew: bool = False,
         force: bool = False,
     ) -> Certificate:
@@ -156,7 +156,7 @@ class CertificatesResource(BaseResource):
         name: str,
         cert_content: str,
         key_content: str,
-        domains: list[str] | None = None,
+        domains: List[str] | None = None,
         auto_renew: bool = False,
         force: bool = False,
     ) -> Certificate:
@@ -191,7 +191,7 @@ class CertificatesResource(BaseResource):
     def create_acme(
         self,
         name: str,
-        domains: list[str],
+        domains: List[str],
         email: str,
         acme_provider: AcmeProvider = AcmeProvider.LETSENCRYPT,
         auto_renew: bool = True,
@@ -238,7 +238,7 @@ class CertificatesResource(BaseResource):
     async def create_acme_async(
         self,
         name: str,
-        domains: list[str],
+        domains: List[str],
         email: str,
         acme_provider: AcmeProvider = AcmeProvider.LETSENCRYPT,
         auto_renew: bool = True,
@@ -352,7 +352,7 @@ class CertificatesResource(BaseResource):
         )
         return AcmeCertificateStatus.model_validate(response.get("data", response))
 
-    def list_acme(self) -> list[AcmeCertificateStatus]:
+    def list_acme(self) -> List[AcmeCertificateStatus]:
         """List all ACME certificates.
 
         Returns:
@@ -364,7 +364,7 @@ class CertificatesResource(BaseResource):
             for c in response.get("data", [])
         ]
 
-    async def list_acme_async(self) -> list[AcmeCertificateStatus]:
+    async def list_acme_async(self) -> List[AcmeCertificateStatus]:
         """List all ACME certificates asynchronously.
 
         Returns:

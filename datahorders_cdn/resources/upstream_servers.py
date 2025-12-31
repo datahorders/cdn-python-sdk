@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, List, cast
 
 from datahorders_cdn.models import ServerProtocol, UpstreamServer
 from datahorders_cdn.resources.base import BaseResource
@@ -33,7 +33,7 @@ class UpstreamServersResource(BaseResource):
             for s in response.get("data", response)
         ]
 
-    async def list_async(self, zone_id: str) -> list[UpstreamServer]:
+    async def list_async(self, zone_id: str) -> List[UpstreamServer]:
         """List servers in a zone's upstream pool asynchronously.
 
         Args:
@@ -274,7 +274,7 @@ class UpstreamServersResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/zones/{zone_id}/upstream/servers/{server_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_async(self, zone_id: str, server_id: str) -> bool:
         """Remove a server from the upstream pool asynchronously.
@@ -289,4 +289,4 @@ class UpstreamServersResource(BaseResource):
         response = await self._delete_async(
             f"/zones/{zone_id}/upstream/servers/{server_id}"
         )
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))

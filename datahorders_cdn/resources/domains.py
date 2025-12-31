@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, List
 
 from datahorders_cdn.models import (
     Domain,
@@ -50,7 +50,7 @@ class DomainsResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         verified: bool | None = None,
-    ) -> tuple[list[Domain], PaginationMeta]:
+    ) -> tuple[List[Domain], PaginationMeta]:
         """List all domains asynchronously.
 
         Args:

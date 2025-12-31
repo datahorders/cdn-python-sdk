@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, List
 
 from datahorders_cdn.models import (
     LoadBalanceMethod,
@@ -50,7 +50,7 @@ class ZonesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         domain: str | None = None,
-    ) -> tuple[list[Zone], PaginationMeta]:
+    ) -> tuple[List[Zone], PaginationMeta]:
         """List all zones asynchronously.
 
         Args:
@@ -123,8 +123,8 @@ class ZonesResource(BaseResource):
     def create(
         self,
         name: str,
-        domains: list[str],
-        servers: list[dict[str, Any]],
+        domains: List[str],
+        servers: List[dict[str, Any]],
         certificate_id: str | None = None,
         load_balance_method: LoadBalanceMethod = LoadBalanceMethod.ROUND_ROBIN,
         upgrade_insecure: bool = True,
@@ -200,8 +200,8 @@ class ZonesResource(BaseResource):
     async def create_async(
         self,
         name: str,
-        domains: list[str],
-        servers: list[dict[str, Any]],
+        domains: List[str],
+        servers: List[dict[str, Any]],
         certificate_id: str | None = None,
         load_balance_method: LoadBalanceMethod = LoadBalanceMethod.ROUND_ROBIN,
         upgrade_insecure: bool = True,
@@ -262,14 +262,14 @@ class ZonesResource(BaseResource):
         zone_id: str | None = None,
         fqdn: str | None = None,
         name: str | None = None,
-        domains: list[str] | None = None,
+        domains: List[str] | None = None,
         certificate_id: str | None = None,
         force_certificate_removal: bool = False,
         upgrade_insecure: bool | None = None,
         four_k_fallback: bool | None = None,
         health_check_enabled: bool | None = None,
         load_balance_method: LoadBalanceMethod | None = None,
-        servers: list[dict[str, Any]] | None = None,
+        servers: List[dict[str, Any]] | None = None,
     ) -> Zone:
         """Update a zone.
 
@@ -351,14 +351,14 @@ class ZonesResource(BaseResource):
         zone_id: str | None = None,
         fqdn: str | None = None,
         name: str | None = None,
-        domains: list[str] | None = None,
+        domains: List[str] | None = None,
         certificate_id: str | None = None,
         force_certificate_removal: bool = False,
         upgrade_insecure: bool | None = None,
         four_k_fallback: bool | None = None,
         health_check_enabled: bool | None = None,
         load_balance_method: LoadBalanceMethod | None = None,
-        servers: list[dict[str, Any]] | None = None,
+        servers: List[dict[str, Any]] | None = None,
     ) -> Zone:
         """Update a zone asynchronously.
 

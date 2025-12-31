@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 
 from datahorders_cdn.models import (
     IpListType,
@@ -446,7 +446,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/zones/{zone_id}/waf/rules/{rule_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_rule_async(self, zone_id: str, rule_id: str) -> bool:
         """Delete a WAF rule asynchronously.
@@ -459,7 +459,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = await self._delete_async(f"/zones/{zone_id}/waf/rules/{rule_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     # ========================================================================
     # IP Lists
@@ -702,7 +702,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/zones/{zone_id}/waf/ip-lists/{ip_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_ip_async(self, zone_id: str, ip_id: str) -> bool:
         """Remove an IP from the list asynchronously.
@@ -715,7 +715,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = await self._delete_async(f"/zones/{zone_id}/waf/ip-lists/{ip_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     # ========================================================================
     # Country Rules
@@ -892,7 +892,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/zones/{zone_id}/waf/countries/{country_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_country_async(self, zone_id: str, country_id: str) -> bool:
         """Delete a country rule asynchronously.
@@ -907,7 +907,7 @@ class WafResource(BaseResource):
         response = await self._delete_async(
             f"/zones/{zone_id}/waf/countries/{country_id}"
         )
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     # ========================================================================
     # ASN Rules
@@ -1091,7 +1091,7 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = self._delete(f"/zones/{zone_id}/waf/asn/{asn_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))
 
     async def delete_asn_async(self, zone_id: str, asn_id: str) -> bool:
         """Delete an ASN rule asynchronously.
@@ -1104,4 +1104,4 @@ class WafResource(BaseResource):
             True if successful.
         """
         response = await self._delete_async(f"/zones/{zone_id}/waf/asn/{asn_id}")
-        return response.get("success", True)
+        return cast(bool, response.get("success", True))

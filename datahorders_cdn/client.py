@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -247,7 +247,7 @@ class DataHordersCDN:
             self._handle_error_response(response)
 
         try:
-            return response.json()
+            return cast(dict[str, Any], response.json())
         except Exception:
             return {"success": True}
 
@@ -279,7 +279,7 @@ class DataHordersCDN:
             self._handle_error_response(response)
 
         try:
-            return response.json()
+            return cast(dict[str, Any], response.json())
         except Exception:
             return {"success": True}
 
