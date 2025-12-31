@@ -300,8 +300,12 @@ class UpstreamServer(BaseModel):
     health_check_connect_timeout: Optional[int] = Field(
         default=None, alias="healthCheckConnectTimeout"
     )
-    health_check_timeout: Optional[int] = Field(default=None, alias="healthCheckTimeout")
-    health_check_retries: Optional[int] = Field(default=None, alias="healthCheckRetries")
+    health_check_timeout: Optional[int] = Field(
+        default=None, alias="healthCheckTimeout"
+    )
+    health_check_retries: Optional[int] = Field(
+        default=None, alias="healthCheckRetries"
+    )
     region: Optional[str] = None
     country: Optional[str] = None
     upstream_id: Optional[str] = Field(default=None, alias="upstreamId")
@@ -441,7 +445,9 @@ class HealthCheckProfile(BaseModel):
     retries: int = 2
     follow_redirects: bool = Field(default=False, alias="followRedirects")
     verify_ssl: bool = Field(default=False, alias="verifySSL")
-    custom_headers: Optional[dict[str, str]] = Field(default=None, alias="customHeaders")
+    custom_headers: Optional[dict[str, str]] = Field(
+        default=None, alias="customHeaders"
+    )
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     created_by: Optional[str] = Field(default=None, alias="createdBy")
@@ -736,7 +742,9 @@ class ZoneUpdateRequest(BaseModel):
     )
     upgrade_insecure: Optional[bool] = Field(default=None, alias="upgradeInsecure")
     four_k_fallback: Optional[bool] = Field(default=None, alias="fourKFallback")
-    health_check_enabled: Optional[bool] = Field(default=None, alias="healthCheckEnabled")
+    health_check_enabled: Optional[bool] = Field(
+        default=None, alias="healthCheckEnabled"
+    )
     upstream: Optional[UpstreamCreate] = None
 
     class Config:
@@ -812,7 +820,9 @@ class HealthCheckProfileCreateRequest(BaseModel):
     retries: int = 2
     follow_redirects: bool = Field(default=False, alias="followRedirects")
     verify_ssl: bool = Field(default=False, alias="verifySSL")
-    custom_headers: Optional[dict[str, str]] = Field(default=None, alias="customHeaders")
+    custom_headers: Optional[dict[str, str]] = Field(
+        default=None, alias="customHeaders"
+    )
 
     class Config:
         """Pydantic config."""
@@ -826,7 +836,9 @@ class WafConfigUpdateRequest(BaseModel):
     enabled: Optional[bool] = None
     mode: Optional[WafMode] = None
     custom_block_page: Optional[str] = Field(default=None, alias="customBlockPage")
-    inherit_global_rules: Optional[bool] = Field(default=None, alias="inheritGlobalRules")
+    inherit_global_rules: Optional[bool] = Field(
+        default=None, alias="inheritGlobalRules"
+    )
     sqli_detection: Optional[bool] = Field(default=None, alias="sqliDetection")
     xss_detection: Optional[bool] = Field(default=None, alias="xssDetection")
 
