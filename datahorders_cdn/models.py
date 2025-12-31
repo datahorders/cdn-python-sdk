@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -156,7 +156,7 @@ class ApiResponse(BaseModel):
     success: bool
     data: Any = None
     error: Any = None
-    meta: PaginationMeta | None = None
+    meta: Optional[PaginationMeta] = None
 
 
 # ============================================================================
@@ -240,12 +240,12 @@ class Certificate(BaseModel):
     id: str
     name: str
     provider: CertificateProvider
-    acme_provider: AcmeProvider | None = Field(default=None, alias="acmeProvider")
+    acme_provider: Optional[AcmeProvider] = Field(default=None, alias="acmeProvider")
     status: CertificateStatus
     auto_renew: bool = Field(alias="autoRenew")
     is_wildcard: bool = Field(default=False, alias="isWildcard")
-    email: str | None = None
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
+    email: Optional[str] = None
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
     domains: list[CertificateDomain] = Field(default_factory=list)
@@ -260,13 +260,13 @@ class AcmeCertificateStatus(BaseModel):
     """ACME certificate status response."""
 
     certificate_id: str = Field(alias="certificateId")
-    name: str | None = None
+    name: Optional[str] = None
     status: CertificateStatus
     progress: int
     message: str
     domains: list[str] = Field(default_factory=list)
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
 
     class Config:
         """Pydantic config."""
@@ -290,21 +290,21 @@ class UpstreamServer(BaseModel):
     """Upstream server model."""
 
     id: str
-    name: str | None = None
+    name: Optional[str] = None
     address: str
     port: int
     protocol: ServerProtocol = ServerProtocol.HTTP
     weight: int = 1
     backup: bool = False
-    health_check_path: str | None = Field(default=None, alias="healthCheckPath")
-    health_check_connect_timeout: int | None = Field(
+    health_check_path: Optional[str] = Field(default=None, alias="healthCheckPath")
+    health_check_connect_timeout: Optional[int] = Field(
         default=None, alias="healthCheckConnectTimeout"
     )
-    health_check_timeout: int | None = Field(default=None, alias="healthCheckTimeout")
-    health_check_retries: int | None = Field(default=None, alias="healthCheckRetries")
-    region: str | None = None
-    country: str | None = None
-    upstream_id: str | None = Field(default=None, alias="upstreamId")
+    health_check_timeout: Optional[int] = Field(default=None, alias="healthCheckTimeout")
+    health_check_retries: Optional[int] = Field(default=None, alias="healthCheckRetries")
+    region: Optional[str] = None
+    country: Optional[str] = None
+    upstream_id: Optional[str] = Field(default=None, alias="upstreamId")
 
     class Config:
         """Pydantic config."""
@@ -316,7 +316,7 @@ class Upstream(BaseModel):
     """Upstream configuration model."""
 
     id: str
-    name: str | None = None
+    name: Optional[str] = None
     load_balance_method: LoadBalanceMethod = Field(
         default=LoadBalanceMethod.ROUND_ROBIN, alias="loadBalanceMethod"
     )
@@ -367,7 +367,7 @@ class ZoneCertificate(BaseModel):
     name: str
     provider: CertificateProvider
     status: CertificateStatus
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
     domains: list[ZoneCertificateDomain] = Field(default_factory=list)
 
     class Config:
@@ -394,14 +394,14 @@ class Zone(BaseModel):
     four_k_fallback: bool = Field(alias="fourKFallback")
     health_check_enabled: bool = Field(alias="healthCheckEnabled")
     user_id: str = Field(alias="userId")
-    certificate_id: str | None = Field(default=None, alias="certificateId")
+    certificate_id: Optional[str] = Field(default=None, alias="certificateId")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    deleted_at: datetime | None = Field(default=None, alias="deletedAt")
+    deleted_at: Optional[datetime] = Field(default=None, alias="deletedAt")
     domains: list[ZoneDomain] = Field(default_factory=list)
-    upstream: Upstream | None = None
-    certificate: ZoneCertificate | None = None
-    health_status: HealthStatus | None = Field(default=None, alias="healthStatus")
+    upstream: Optional[Upstream] = None
+    certificate: Optional[ZoneCertificate] = None
+    health_status: Optional[HealthStatus] = Field(default=None, alias="healthStatus")
 
     class Config:
         """Pydantic config."""
@@ -414,7 +414,7 @@ class ZoneDeleteResponse(BaseModel):
 
     id: str
     deleted: bool
-    message: str | None = None
+    message: Optional[str] = None
 
 
 # ============================================================================
@@ -427,13 +427,13 @@ class HealthCheckProfile(BaseModel):
 
     id: str
     name: str
-    description: str | None = None
+    description: Optional[str] = None
     protocol: HealthCheckProtocol = HealthCheckProtocol.HTTP
     port: int = 80
     path: str = "/"
     method: HealthCheckMethod = HealthCheckMethod.HEAD
     expected_status_codes: str = Field(default="200-399", alias="expectedStatusCodes")
-    expected_response_text: str | None = Field(
+    expected_response_text: Optional[str] = Field(
         default=None, alias="expectedResponseText"
     )
     check_interval: int = Field(default=30, alias="checkInterval")
@@ -441,13 +441,11 @@ class HealthCheckProfile(BaseModel):
     retries: int = 2
     follow_redirects: bool = Field(default=False, alias="followRedirects")
     verify_ssl: bool = Field(default=False, alias="verifySSL")
-    custom_headers: dict[str, str] | None = Field(
-        default=None, alias="customHeaders"
-    )
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
-    created_by: str | None = Field(default=None, alias="createdBy")
-    server_count: int | None = Field(default=None, alias="serverCount")
+    custom_headers: Optional[dict[str, str]] = Field(default=None, alias="customHeaders")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
+    created_by: Optional[str] = Field(default=None, alias="createdBy")
+    server_count: Optional[int] = Field(default=None, alias="serverCount")
 
     class Config:
         """Pydantic config."""
@@ -478,7 +476,7 @@ class HealthCheckToggleResponse(BaseModel):
     message: str
     server_id: str = Field(alias="serverId")
     action: str
-    reason: str | None = None
+    reason: Optional[str] = None
 
     class Config:
         """Pydantic config."""
@@ -495,9 +493,9 @@ class WafRule(BaseModel):
     """WAF rule model."""
 
     id: str
-    zone_config_id: str | None = Field(default=None, alias="zoneConfigId")
+    zone_config_id: Optional[str] = Field(default=None, alias="zoneConfigId")
     name: str
-    description: str | None = None
+    description: Optional[str] = None
     rule_type: WafRuleType = Field(alias="ruleType")
     match_target: WafMatchTarget = Field(alias="matchTarget")
     match_pattern: str = Field(alias="matchPattern")
@@ -505,9 +503,9 @@ class WafRule(BaseModel):
     severity: WafSeverity = WafSeverity.MEDIUM
     enabled: bool = True
     priority: int = 500
-    metadata: dict[str, Any] | None = None
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
+    metadata: Optional[dict[str, Any]] = None
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
 
     class Config:
         """Pydantic config."""
@@ -519,14 +517,14 @@ class WafIpEntry(BaseModel):
     """WAF IP list entry model."""
 
     id: str
-    zone_config_id: str | None = Field(default=None, alias="zoneConfigId")
+    zone_config_id: Optional[str] = Field(default=None, alias="zoneConfigId")
     list_type: IpListType = Field(alias="listType")
     ip_address: str = Field(alias="ipAddress")
-    reason: str | None = None
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
-    created_by: str | None = Field(default=None, alias="createdBy")
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
+    reason: Optional[str] = None
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
+    created_by: Optional[str] = Field(default=None, alias="createdBy")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
 
     class Config:
         """Pydantic config."""
@@ -538,13 +536,13 @@ class WafCountryRule(BaseModel):
     """WAF country blocking rule model."""
 
     id: str
-    zone_config_id: str | None = Field(default=None, alias="zoneConfigId")
+    zone_config_id: Optional[str] = Field(default=None, alias="zoneConfigId")
     country_code: str = Field(alias="countryCode")
     action: WafAction
-    reason: str | None = None
+    reason: Optional[str] = None
     enabled: bool = True
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
 
     class Config:
         """Pydantic config."""
@@ -556,14 +554,14 @@ class WafAsnRule(BaseModel):
     """WAF ASN blocking rule model."""
 
     id: str
-    zone_config_id: str | None = Field(default=None, alias="zoneConfigId")
+    zone_config_id: Optional[str] = Field(default=None, alias="zoneConfigId")
     asn: int
-    asn_name: str | None = Field(default=None, alias="asnName")
+    asn_name: Optional[str] = Field(default=None, alias="asnName")
     action: WafAction
-    reason: str | None = None
+    reason: Optional[str] = None
     enabled: bool = True
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
 
     class Config:
         """Pydantic config."""
@@ -594,12 +592,12 @@ class WafConfig(BaseModel):
     zone_id: str = Field(alias="zoneId")
     enabled: bool = True
     mode: WafMode = WafMode.LOG_ONLY
-    custom_block_page: str | None = Field(default=None, alias="customBlockPage")
+    custom_block_page: Optional[str] = Field(default=None, alias="customBlockPage")
     inherit_global_rules: bool = Field(default=True, alias="inheritGlobalRules")
     sqli_detection: bool = Field(default=True, alias="sqliDetection")
     xss_detection: bool = Field(default=True, alias="xssDetection")
-    created_at: datetime | None = Field(default=None, alias="createdAt")
-    updated_at: datetime | None = Field(default=None, alias="updatedAt")
+    created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     zone_rules: list[WafRule] = Field(default_factory=list, alias="zoneRules")
     ip_lists: list[WafIpEntry] = Field(default_factory=list, alias="ipLists")
     country_rules: list[WafCountryRule] = Field(
@@ -675,20 +673,20 @@ class DomainCreateRequest(BaseModel):
 class DomainVerifyRequest(BaseModel):
     """Request to verify a domain."""
 
-    domain: str | None = None
-    id: str | None = None
+    domain: Optional[str] = None
+    id: Optional[str] = None
 
 
 class UpstreamServerCreate(BaseModel):
     """Server configuration for creating upstream."""
 
-    name: str | None = None
+    name: Optional[str] = None
     address: str
     port: int = 80
     protocol: ServerProtocol = ServerProtocol.HTTP
     weight: int = 1
     backup: bool = False
-    health_check_path: str | None = Field(default=None, alias="healthCheckPath")
+    health_check_path: Optional[str] = Field(default=None, alias="healthCheckPath")
 
     class Config:
         """Pydantic config."""
@@ -715,7 +713,7 @@ class ZoneCreateRequest(BaseModel):
 
     name: str
     domains: list[str]
-    certificate_id: str | None = Field(default=None, alias="certificateId")
+    certificate_id: Optional[str] = Field(default=None, alias="certificateId")
     upgrade_insecure: bool = Field(default=True, alias="upgradeInsecure")
     four_k_fallback: bool = Field(default=False, alias="fourKFallback")
     health_check_enabled: bool = Field(default=False, alias="healthCheckEnabled")
@@ -730,16 +728,16 @@ class ZoneCreateRequest(BaseModel):
 class ZoneUpdateRequest(BaseModel):
     """Request to update a zone."""
 
-    name: str | None = None
-    domains: list[str] | None = None
-    certificate_id: str | None = Field(default=None, alias="certificateId")
+    name: Optional[str] = None
+    domains: Optional[list[str]] = None
+    certificate_id: Optional[str] = Field(default=None, alias="certificateId")
     force_certificate_removal: bool = Field(
         default=False, alias="forceCertificateRemoval"
     )
-    upgrade_insecure: bool | None = Field(default=None, alias="upgradeInsecure")
-    four_k_fallback: bool | None = Field(default=None, alias="fourKFallback")
-    health_check_enabled: bool | None = Field(default=None, alias="healthCheckEnabled")
-    upstream: UpstreamCreate | None = None
+    upgrade_insecure: Optional[bool] = Field(default=None, alias="upgradeInsecure")
+    four_k_fallback: Optional[bool] = Field(default=None, alias="fourKFallback")
+    health_check_enabled: Optional[bool] = Field(default=None, alias="healthCheckEnabled")
+    upstream: Optional[UpstreamCreate] = None
 
     class Config:
         """Pydantic config."""
@@ -752,7 +750,7 @@ class CertificateCreateRequest(BaseModel):
 
     name: str
     provider: CertificateProvider = CertificateProvider.MANUAL
-    domains: list[str] | None = None
+    domains: Optional[list[str]] = None
     cert_content: str = Field(alias="certContent")
     key_content: str = Field(alias="keyContent")
     auto_renew: bool = Field(default=False, alias="autoRenew")
@@ -785,10 +783,10 @@ class AcmeCertificateCreateRequest(BaseModel):
 class CertificateUpdateRequest(BaseModel):
     """Request to update a certificate."""
 
-    name: str | None = None
-    auto_renew: bool | None = Field(default=None, alias="autoRenew")
-    cert_content: str | None = Field(default=None, alias="certContent")
-    key_content: str | None = Field(default=None, alias="keyContent")
+    name: Optional[str] = None
+    auto_renew: Optional[bool] = Field(default=None, alias="autoRenew")
+    cert_content: Optional[str] = Field(default=None, alias="certContent")
+    key_content: Optional[str] = Field(default=None, alias="keyContent")
 
     class Config:
         """Pydantic config."""
@@ -800,13 +798,13 @@ class HealthCheckProfileCreateRequest(BaseModel):
     """Request to create a health check profile."""
 
     name: str
-    description: str | None = None
+    description: Optional[str] = None
     protocol: HealthCheckProtocol = HealthCheckProtocol.HTTP
     port: int = 80
     path: str = "/"
     method: HealthCheckMethod = HealthCheckMethod.HEAD
     expected_status_codes: str = Field(default="200-399", alias="expectedStatusCodes")
-    expected_response_text: str | None = Field(
+    expected_response_text: Optional[str] = Field(
         default=None, alias="expectedResponseText"
     )
     check_interval: int = Field(default=30, alias="checkInterval")
@@ -814,9 +812,7 @@ class HealthCheckProfileCreateRequest(BaseModel):
     retries: int = 2
     follow_redirects: bool = Field(default=False, alias="followRedirects")
     verify_ssl: bool = Field(default=False, alias="verifySSL")
-    custom_headers: dict[str, str] | None = Field(
-        default=None, alias="customHeaders"
-    )
+    custom_headers: Optional[dict[str, str]] = Field(default=None, alias="customHeaders")
 
     class Config:
         """Pydantic config."""
@@ -827,14 +823,12 @@ class HealthCheckProfileCreateRequest(BaseModel):
 class WafConfigUpdateRequest(BaseModel):
     """Request to update WAF configuration."""
 
-    enabled: bool | None = None
-    mode: WafMode | None = None
-    custom_block_page: str | None = Field(default=None, alias="customBlockPage")
-    inherit_global_rules: bool | None = Field(
-        default=None, alias="inheritGlobalRules"
-    )
-    sqli_detection: bool | None = Field(default=None, alias="sqliDetection")
-    xss_detection: bool | None = Field(default=None, alias="xssDetection")
+    enabled: Optional[bool] = None
+    mode: Optional[WafMode] = None
+    custom_block_page: Optional[str] = Field(default=None, alias="customBlockPage")
+    inherit_global_rules: Optional[bool] = Field(default=None, alias="inheritGlobalRules")
+    sqli_detection: Optional[bool] = Field(default=None, alias="sqliDetection")
+    xss_detection: Optional[bool] = Field(default=None, alias="xssDetection")
 
     class Config:
         """Pydantic config."""
@@ -846,7 +840,7 @@ class WafRuleCreateRequest(BaseModel):
     """Request to create a WAF rule."""
 
     name: str
-    description: str | None = None
+    description: Optional[str] = None
     rule_type: WafRuleType = Field(alias="ruleType")
     match_target: WafMatchTarget = Field(alias="matchTarget")
     match_pattern: str = Field(alias="matchPattern")
@@ -854,7 +848,7 @@ class WafRuleCreateRequest(BaseModel):
     severity: WafSeverity = WafSeverity.MEDIUM
     enabled: bool = True
     priority: int = 500
-    metadata: dict[str, Any] | None = None
+    metadata: Optional[dict[str, Any]] = None
 
     class Config:
         """Pydantic config."""
@@ -865,13 +859,13 @@ class WafRuleCreateRequest(BaseModel):
 class WafRuleUpdateRequest(BaseModel):
     """Request to update a WAF rule."""
 
-    name: str | None = None
-    description: str | None = None
-    match_pattern: str | None = Field(default=None, alias="matchPattern")
-    action: WafAction | None = None
-    severity: WafSeverity | None = None
-    enabled: bool | None = None
-    priority: int | None = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    match_pattern: Optional[str] = Field(default=None, alias="matchPattern")
+    action: Optional[WafAction] = None
+    severity: Optional[WafSeverity] = None
+    enabled: Optional[bool] = None
+    priority: Optional[int] = None
 
     class Config:
         """Pydantic config."""
@@ -884,8 +878,8 @@ class WafIpCreateRequest(BaseModel):
 
     list_type: IpListType = Field(alias="listType")
     ip_address: str = Field(alias="ipAddress")
-    reason: str | None = None
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
+    reason: Optional[str] = None
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
 
     class Config:
         """Pydantic config."""
@@ -896,8 +890,8 @@ class WafIpCreateRequest(BaseModel):
 class WafIpUpdateRequest(BaseModel):
     """Request to update a WAF IP entry."""
 
-    reason: str | None = None
-    expires_at: datetime | None = Field(default=None, alias="expiresAt")
+    reason: Optional[str] = None
+    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
 
     class Config:
         """Pydantic config."""
@@ -910,7 +904,7 @@ class WafCountryCreateRequest(BaseModel):
 
     country_code: str = Field(alias="countryCode")
     action: WafAction
-    reason: str | None = None
+    reason: Optional[str] = None
     enabled: bool = True
 
     class Config:
@@ -922,9 +916,9 @@ class WafCountryCreateRequest(BaseModel):
 class WafCountryUpdateRequest(BaseModel):
     """Request to update a country rule."""
 
-    action: WafAction | None = None
-    reason: str | None = None
-    enabled: bool | None = None
+    action: Optional[WafAction] = None
+    reason: Optional[str] = None
+    enabled: Optional[bool] = None
 
     class Config:
         """Pydantic config."""
@@ -936,9 +930,9 @@ class WafAsnCreateRequest(BaseModel):
     """Request to create an ASN rule."""
 
     asn: int
-    asn_name: str | None = Field(default=None, alias="asnName")
+    asn_name: Optional[str] = Field(default=None, alias="asnName")
     action: WafAction
-    reason: str | None = None
+    reason: Optional[str] = None
     enabled: bool = True
 
     class Config:
@@ -950,10 +944,10 @@ class WafAsnCreateRequest(BaseModel):
 class WafAsnUpdateRequest(BaseModel):
     """Request to update an ASN rule."""
 
-    asn_name: str | None = Field(default=None, alias="asnName")
-    action: WafAction | None = None
-    reason: str | None = None
-    enabled: bool | None = None
+    asn_name: Optional[str] = Field(default=None, alias="asnName")
+    action: Optional[WafAction] = None
+    reason: Optional[str] = None
+    enabled: Optional[bool] = None
 
     class Config:
         """Pydantic config."""
@@ -971,8 +965,8 @@ class UpstreamServerCreateRequest(BaseModel):
     weight: int = 1
     backup: bool = False
     health_check_path: str = Field(alias="healthCheckPath")
-    region: str | None = None
-    country: str | None = None
+    region: Optional[str] = None
+    country: Optional[str] = None
 
     class Config:
         """Pydantic config."""
@@ -983,15 +977,15 @@ class UpstreamServerCreateRequest(BaseModel):
 class UpstreamServerUpdateRequest(BaseModel):
     """Request to update an upstream server."""
 
-    name: str | None = None
-    address: str | None = None
-    port: int | None = None
-    protocol: ServerProtocol | None = None
-    weight: int | None = None
-    backup: bool | None = None
-    health_check_path: str | None = Field(default=None, alias="healthCheckPath")
-    region: str | None = None
-    country: str | None = None
+    name: Optional[str] = None
+    address: Optional[str] = None
+    port: Optional[int] = None
+    protocol: Optional[ServerProtocol] = None
+    weight: Optional[int] = None
+    backup: Optional[bool] = None
+    health_check_path: Optional[str] = Field(default=None, alias="healthCheckPath")
+    region: Optional[str] = None
+    country: Optional[str] = None
 
     class Config:
         """Pydantic config."""

@@ -8,7 +8,9 @@ from typing import Any
 class DataHordersError(Exception):
     """Base exception for all DataHorders CDN SDK errors."""
 
-    def __init__(self, message: str, code: str | None = None, details: Any = None) -> None:
+    def __init__(
+        self, message: str, code: str | None = None, details: Any = None
+    ) -> None:
         """Initialize the exception.
 
         Args:
@@ -29,7 +31,9 @@ class DataHordersError(Exception):
 
     def __repr__(self) -> str:
         """Return repr of the error."""
-        return f"{self.__class__.__name__}(message={self.message!r}, code={self.code!r})"
+        return (
+            f"{self.__class__.__name__}(message={self.message!r}, code={self.code!r})"
+        )
 
 
 class AuthenticationError(DataHordersError):

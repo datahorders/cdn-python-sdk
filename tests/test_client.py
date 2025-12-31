@@ -46,9 +46,7 @@ class TestClientInitialization:
 
     def test_client_strips_trailing_slash_from_base_url(self, api_key: str) -> None:
         """Test that the client strips trailing slashes from the base URL."""
-        client = DataHordersCDN(
-            api_key=api_key, base_url="https://api.example.com/v1/"
-        )
+        client = DataHordersCDN(api_key=api_key, base_url="https://api.example.com/v1/")
         assert client._base_url == "https://api.example.com/v1"
         client.close()
 
@@ -98,9 +96,7 @@ class TestClientResources:
         assert hasattr(client, "analytics")
         assert isinstance(client.analytics, AnalyticsResource)
 
-    def test_client_has_upstream_servers_resource(
-        self, client: DataHordersCDN
-    ) -> None:
+    def test_client_has_upstream_servers_resource(self, client: DataHordersCDN) -> None:
         """Test that the client has an upstream_servers resource."""
         assert hasattr(client, "upstream_servers")
         assert isinstance(client.upstream_servers, UpstreamServersResource)
@@ -262,9 +258,7 @@ class TestClientRequests:
                 },
             }
         }
-        mock_api.post("/domains").mock(
-            return_value=Response(200, json=response_data)
-        )
+        mock_api.post("/domains").mock(return_value=Response(200, json=response_data))
         result = client.domains.create(domain="newdomain.com")
         assert result.domain.domain == "newdomain.com"
 

@@ -43,8 +43,7 @@ class HealthChecksResource(BaseResource):
 
         response = self._get("/healthcheck-profiles", params=params)
         profiles = [
-            HealthCheckProfile.model_validate(p)
-            for p in response.get("profiles", [])
+            HealthCheckProfile.model_validate(p) for p in response.get("profiles", [])
         ]
         pagination = response.get("pagination", {})
         return profiles, pagination
@@ -71,8 +70,7 @@ class HealthChecksResource(BaseResource):
 
         response = await self._get_async("/healthcheck-profiles", params=params)
         profiles = [
-            HealthCheckProfile.model_validate(p)
-            for p in response.get("profiles", [])
+            HealthCheckProfile.model_validate(p) for p in response.get("profiles", [])
         ]
         pagination = response.get("pagination", {})
         return profiles, pagination

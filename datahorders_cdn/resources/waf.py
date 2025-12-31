@@ -730,10 +730,7 @@ class WafResource(BaseResource):
             List of country rules.
         """
         response = self._get(f"/zones/{zone_id}/waf/countries")
-        return [
-            WafCountryRule.model_validate(c)
-            for c in response.get("data", [])
-        ]
+        return [WafCountryRule.model_validate(c) for c in response.get("data", [])]
 
     async def list_countries_async(self, zone_id: str) -> list[WafCountryRule]:
         """List country blocking rules for a zone asynchronously.
@@ -745,10 +742,7 @@ class WafResource(BaseResource):
             List of country rules.
         """
         response = await self._get_async(f"/zones/{zone_id}/waf/countries")
-        return [
-            WafCountryRule.model_validate(c)
-            for c in response.get("data", [])
-        ]
+        return [WafCountryRule.model_validate(c) for c in response.get("data", [])]
 
     def add_country(
         self,

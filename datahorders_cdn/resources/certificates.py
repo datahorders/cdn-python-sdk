@@ -291,14 +291,18 @@ class CertificatesResource(BaseResource):
         data = response.get("data", {})
         # Handle the nested certificate response
         if "certificate" in data:
-            return AcmeCertificateStatus.model_validate({
-                "certificateId": data["certificate"]["id"],
-                "name": data["certificate"]["name"],
-                "status": data["certificate"]["status"],
-                "progress": 0,
-                "message": data.get("message", "Certificate pending"),
-                "domains": [d["domain"] for d in data["certificate"].get("domains", [])],
-            })
+            return AcmeCertificateStatus.model_validate(
+                {
+                    "certificateId": data["certificate"]["id"],
+                    "name": data["certificate"]["name"],
+                    "status": data["certificate"]["status"],
+                    "progress": 0,
+                    "message": data.get("message", "Certificate pending"),
+                    "domains": [
+                        d["domain"] for d in data["certificate"].get("domains", [])
+                    ],
+                }
+            )
         return AcmeCertificateStatus.model_validate(data)
 
     async def create_acme_simple_async(self, domain: str) -> AcmeCertificateStatus:
@@ -313,14 +317,18 @@ class CertificatesResource(BaseResource):
         response = await self._post_async("/certificates", data={"domain": domain})
         data = response.get("data", {})
         if "certificate" in data:
-            return AcmeCertificateStatus.model_validate({
-                "certificateId": data["certificate"]["id"],
-                "name": data["certificate"]["name"],
-                "status": data["certificate"]["status"],
-                "progress": 0,
-                "message": data.get("message", "Certificate pending"),
-                "domains": [d["domain"] for d in data["certificate"].get("domains", [])],
-            })
+            return AcmeCertificateStatus.model_validate(
+                {
+                    "certificateId": data["certificate"]["id"],
+                    "name": data["certificate"]["name"],
+                    "status": data["certificate"]["status"],
+                    "progress": 0,
+                    "message": data.get("message", "Certificate pending"),
+                    "domains": [
+                        d["domain"] for d in data["certificate"].get("domains", [])
+                    ],
+                }
+            )
         return AcmeCertificateStatus.model_validate(data)
 
     def get_acme_status(self, certificate_id: str) -> AcmeCertificateStatus:
@@ -364,8 +372,7 @@ class CertificatesResource(BaseResource):
         """
         response = self._get("/certificates/acme")
         return [
-            AcmeCertificateStatus.model_validate(c)
-            for c in response.get("data", [])
+            AcmeCertificateStatus.model_validate(c) for c in response.get("data", [])
         ]
 
     async def list_acme_async(self) -> _list[AcmeCertificateStatus]:
@@ -376,8 +383,7 @@ class CertificatesResource(BaseResource):
         """
         response = await self._get_async("/certificates/acme")
         return [
-            AcmeCertificateStatus.model_validate(c)
-            for c in response.get("data", [])
+            AcmeCertificateStatus.model_validate(c) for c in response.get("data", [])
         ]
 
     def update(

@@ -33,8 +33,7 @@ class UpstreamServersResource(BaseResource):
         if isinstance(response, list):
             return [UpstreamServer.model_validate(s) for s in response]
         return [
-            UpstreamServer.model_validate(s)
-            for s in response.get("data", response)
+            UpstreamServer.model_validate(s) for s in response.get("data", response)
         ]
 
     async def list_async(self, zone_id: str) -> _list[UpstreamServer]:
@@ -50,8 +49,7 @@ class UpstreamServersResource(BaseResource):
         if isinstance(response, list):
             return [UpstreamServer.model_validate(s) for s in response]
         return [
-            UpstreamServer.model_validate(s)
-            for s in response.get("data", response)
+            UpstreamServer.model_validate(s) for s in response.get("data", response)
         ]
 
     def create(

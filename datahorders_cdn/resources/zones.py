@@ -434,7 +434,9 @@ class ZonesResource(BaseResource):
         if zone_id:
             response = await self._put_async(f"/zones/{zone_id}", data=data)
         else:
-            response = await self._patch_async("/zones", data=data, params={"fqdn": fqdn})
+            response = await self._patch_async(
+                "/zones", data=data, params={"fqdn": fqdn}
+            )
 
         return Zone.model_validate(response.get("data", response))
 

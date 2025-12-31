@@ -160,7 +160,9 @@ class BaseResource:
         Returns:
             Response data.
         """
-        return await self._client._request_async("PATCH", path, json=data, params=params)
+        return await self._client._request_async(
+            "PATCH", path, json=data, params=params
+        )
 
     def _delete(
         self,
