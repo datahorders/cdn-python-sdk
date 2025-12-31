@@ -367,7 +367,7 @@ class DataHordersCDN:
             await self._async_client.aclose()
             self._async_client = None
 
-    def __enter__(self) -> "DataHordersCDN":
+    def __enter__(self) -> DataHordersCDN:
         """Context manager entry."""
         return self
 
@@ -375,7 +375,7 @@ class DataHordersCDN:
         """Context manager exit."""
         self.close()
 
-    async def __aenter__(self) -> "DataHordersCDN":
+    async def __aenter__(self) -> DataHordersCDN:
         """Async context manager entry."""
         return self
 

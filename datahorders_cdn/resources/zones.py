@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
-from typing import Any, List
+import builtins
+from typing import Any
 
 from datahorders_cdn.models import (
     LoadBalanceMethod,
     PaginationMeta,
-    ServerProtocol,
     Zone,
     ZoneDeleteResponse,
 )
 from datahorders_cdn.resources.base import BaseResource
+
+# Alias to avoid shadowing by the `list` method in classes
+_list = builtins.list
 
 
 class ZonesResource(BaseResource):
@@ -25,7 +28,7 @@ class ZonesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         domain: str | None = None,
-    ) -> tuple[list[Zone], PaginationMeta]:
+    ) -> tuple[_list[Zone], PaginationMeta]:
         """List all zones.
 
         Args:
@@ -50,7 +53,7 @@ class ZonesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         domain: str | None = None,
-    ) -> tuple[List[Zone], PaginationMeta]:
+    ) -> tuple[_list[Zone], PaginationMeta]:
         """List all zones asynchronously.
 
         Args:
@@ -123,8 +126,8 @@ class ZonesResource(BaseResource):
     def create(
         self,
         name: str,
-        domains: List[str],
-        servers: List[dict[str, Any]],
+        domains: _list[str],
+        servers: _list[dict[str, Any]],
         certificate_id: str | None = None,
         load_balance_method: LoadBalanceMethod = LoadBalanceMethod.ROUND_ROBIN,
         upgrade_insecure: bool = True,
@@ -200,8 +203,8 @@ class ZonesResource(BaseResource):
     async def create_async(
         self,
         name: str,
-        domains: List[str],
-        servers: List[dict[str, Any]],
+        domains: _list[str],
+        servers: _list[dict[str, Any]],
         certificate_id: str | None = None,
         load_balance_method: LoadBalanceMethod = LoadBalanceMethod.ROUND_ROBIN,
         upgrade_insecure: bool = True,
@@ -262,14 +265,14 @@ class ZonesResource(BaseResource):
         zone_id: str | None = None,
         fqdn: str | None = None,
         name: str | None = None,
-        domains: List[str] | None = None,
+        domains: _list[str] | None = None,
         certificate_id: str | None = None,
         force_certificate_removal: bool = False,
         upgrade_insecure: bool | None = None,
         four_k_fallback: bool | None = None,
         health_check_enabled: bool | None = None,
         load_balance_method: LoadBalanceMethod | None = None,
-        servers: List[dict[str, Any]] | None = None,
+        servers: _list[dict[str, Any]] | None = None,
     ) -> Zone:
         """Update a zone.
 
@@ -351,14 +354,14 @@ class ZonesResource(BaseResource):
         zone_id: str | None = None,
         fqdn: str | None = None,
         name: str | None = None,
-        domains: List[str] | None = None,
+        domains: _list[str] | None = None,
         certificate_id: str | None = None,
         force_certificate_removal: bool = False,
         upgrade_insecure: bool | None = None,
         four_k_fallback: bool | None = None,
         health_check_enabled: bool | None = None,
         load_balance_method: LoadBalanceMethod | None = None,
-        servers: List[dict[str, Any]] | None = None,
+        servers: _list[dict[str, Any]] | None = None,
     ) -> Zone:
         """Update a zone asynchronously.
 

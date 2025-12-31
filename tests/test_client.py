@@ -163,7 +163,7 @@ class TestClientErrorHandling:
     """Tests for client error handling."""
 
     def test_authentication_error_on_401(
-        self, client: DataHordersCDN, mock_api: respx.MockRouter, base_url: str
+        self, client: DataHordersCDN, mock_api: respx.MockRouter
     ) -> None:
         """Test that 401 responses raise AuthenticationError."""
         mock_api.get("/domains").mock(

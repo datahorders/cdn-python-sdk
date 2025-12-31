@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Any, List
+import builtins
+from typing import Any
 
 from datahorders_cdn.models import (
     AcmeCertificateStatus,
@@ -12,6 +13,9 @@ from datahorders_cdn.models import (
     PaginationMeta,
 )
 from datahorders_cdn.resources.base import BaseResource
+
+# Alias to avoid shadowing by the `list` method in classes
+_list = builtins.list
 
 
 class CertificatesResource(BaseResource):
@@ -25,7 +29,7 @@ class CertificatesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         status: str | None = None,
-    ) -> tuple[list[Certificate], PaginationMeta]:
+    ) -> tuple[_list[Certificate], PaginationMeta]:
         """List all certificates.
 
         Args:
@@ -50,7 +54,7 @@ class CertificatesResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         status: str | None = None,
-    ) -> tuple[List[Certificate], PaginationMeta]:
+    ) -> tuple[_list[Certificate], PaginationMeta]:
         """List all certificates asynchronously.
 
         Args:
@@ -117,7 +121,7 @@ class CertificatesResource(BaseResource):
         name: str,
         cert_content: str,
         key_content: str,
-        domains: List[str] | None = None,
+        domains: _list[str] | None = None,
         auto_renew: bool = False,
         force: bool = False,
     ) -> Certificate:
@@ -156,7 +160,7 @@ class CertificatesResource(BaseResource):
         name: str,
         cert_content: str,
         key_content: str,
-        domains: List[str] | None = None,
+        domains: _list[str] | None = None,
         auto_renew: bool = False,
         force: bool = False,
     ) -> Certificate:
@@ -191,7 +195,7 @@ class CertificatesResource(BaseResource):
     def create_acme(
         self,
         name: str,
-        domains: List[str],
+        domains: _list[str],
         email: str,
         acme_provider: AcmeProvider = AcmeProvider.LETSENCRYPT,
         auto_renew: bool = True,
@@ -238,7 +242,7 @@ class CertificatesResource(BaseResource):
     async def create_acme_async(
         self,
         name: str,
-        domains: List[str],
+        domains: _list[str],
         email: str,
         acme_provider: AcmeProvider = AcmeProvider.LETSENCRYPT,
         auto_renew: bool = True,
@@ -352,7 +356,7 @@ class CertificatesResource(BaseResource):
         )
         return AcmeCertificateStatus.model_validate(response.get("data", response))
 
-    def list_acme(self) -> List[AcmeCertificateStatus]:
+    def list_acme(self) -> _list[AcmeCertificateStatus]:
         """List all ACME certificates.
 
         Returns:
@@ -364,7 +368,7 @@ class CertificatesResource(BaseResource):
             for c in response.get("data", [])
         ]
 
-    async def list_acme_async(self) -> List[AcmeCertificateStatus]:
+    async def list_acme_async(self) -> _list[AcmeCertificateStatus]:
         """List all ACME certificates asynchronously.
 
         Returns:

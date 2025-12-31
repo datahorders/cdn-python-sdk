@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Any, List, cast
+import builtins
+from typing import Any, cast
 
 from datahorders_cdn.models import ServerProtocol, UpstreamServer
 from datahorders_cdn.resources.base import BaseResource
+
+# Alias to avoid shadowing by the `list` method in classes
+_list = builtins.list
 
 
 class UpstreamServersResource(BaseResource):
@@ -15,7 +19,7 @@ class UpstreamServersResource(BaseResource):
     with configurable load balancing.
     """
 
-    def list(self, zone_id: str) -> list[UpstreamServer]:
+    def list(self, zone_id: str) -> _list[UpstreamServer]:
         """List servers in a zone's upstream pool.
 
         Args:
@@ -33,7 +37,7 @@ class UpstreamServersResource(BaseResource):
             for s in response.get("data", response)
         ]
 
-    async def list_async(self, zone_id: str) -> List[UpstreamServer]:
+    async def list_async(self, zone_id: str) -> _list[UpstreamServer]:
         """List servers in a zone's upstream pool asynchronously.
 
         Args:

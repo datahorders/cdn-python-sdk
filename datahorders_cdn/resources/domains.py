@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Any, List
+import builtins
+from typing import Any
 
 from datahorders_cdn.models import (
     Domain,
@@ -12,6 +13,9 @@ from datahorders_cdn.models import (
     PaginationMeta,
 )
 from datahorders_cdn.resources.base import BaseResource
+
+# Alias to avoid shadowing by the `list` method in classes
+_list = builtins.list
 
 
 class DomainsResource(BaseResource):
@@ -25,7 +29,7 @@ class DomainsResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         verified: bool | None = None,
-    ) -> tuple[list[Domain], PaginationMeta]:
+    ) -> tuple[_list[Domain], PaginationMeta]:
         """List all domains.
 
         Args:
@@ -50,7 +54,7 @@ class DomainsResource(BaseResource):
         page: int = 1,
         per_page: int = 10,
         verified: bool | None = None,
-    ) -> tuple[List[Domain], PaginationMeta]:
+    ) -> tuple[_list[Domain], PaginationMeta]:
         """List all domains asynchronously.
 
         Args:

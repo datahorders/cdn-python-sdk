@@ -10,7 +10,6 @@ from datahorders_cdn.models import (
     PaginationMeta,
     WafAction,
     WafAsnRule,
-    WafConfig,
     WafConfigResponse,
     WafCountryRule,
     WafIpEntry,
